@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Landis.Extension.FPS-v1</AssemblyName>
+    <RootNamespace>Landis.Extension.FPS</RootNamespace>
+    <ApplicationIcon />
+    <StartupObject />
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;C:\Projects\Landis\FPS code\bin\Debug\netcoreapp2.0\$(TargetName).dll&quot;  &quot;C:\Program Files\LANDIS-II-v7\extensions&quot;" />
+  </Target>
+
+  <ItemGroup>
+    <Compile Remove="PlugIn.cs" />
+    <Compile Remove="utility\GdalConfiguration.cs" />
+    <Compile Remove="utility\IntPixel.cs" />
+    <Compile Remove="utility\UShortPixel.cs" />
+    <Compile Remove="utility\Util.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="lib\gdal_wrap.dll" />
+    <None Remove="lib\support_libs_download.ps1" />
+    <None Remove="runPub.bat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Landis.Core">
+      <HintPath>..\..\..\..\..\Program Files\LANDIS-II-v7\v7\Landis.Core.dll</HintPath>
+    </Reference>
+     <Reference Include="Landis.Library.Metadata-v2">
+      <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Parameters-v2">
+      <HintPath>lib\Landis.Library.Parameters-v2.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Utilities">
+      <HintPath>..\..\..\..\..\Program Files\LANDIS-II-v7\v7\Landis.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\..\Program Files\LANDIS-II-v7\v7\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\..\..\..\Program Files\LANDIS-II-v7\v7\MathNet.Numerics.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

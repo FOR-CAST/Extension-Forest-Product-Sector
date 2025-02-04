@@ -1,0 +1,235 @@
+>> Tables formatted in Notepadd++ v8.5.4
+LandisData  "FPS"
+
+>> Length of cell side in m, used to convert m2 values to totals, should be the same as in ForCS run. Set to 1 for no unit conversion.
+CellLength 100
+
+>> Number of years past the last harvest to simulate
+YearsPostHarvest 10
+
+HarvestFileLive	"log_FluxBio.csv"
+HarvestFileDOM	"log_fluxDOM.csv"
+ManagementUnits	"manunits.gis"
+
+OutputInterval  1
+
+SpeciesGroupTable
+>>Group: up to 2. Use word "all" to mean all species
+>>  all     99     ALL
+>>Species  Group  GroupName
+>>----------------------------------------------
+ pinubank	90	softwood
+ querelli	91	hardwood
+ pinuresin	90	softwood
+
+
+
+ProportionsFromForestToMills
+>>							 
+>> Time		Unit	Species	Pool 		Mill Code	Mill Name
+>> Start 	Code 	Group	(From) 		(To)			(To)			SPG X
+>>---------------------------------------------------------------------------------------
+	0		1			90	BioToFPS	1		SoftwoodLumberMill		0.5
+	0		1			90	BioToFPS	2		ChipMill				0
+	0		1			90	BioToFPS	3		SoftwoodPlywoodMill		0.2
+	0		1			90	BioToFPS	4		OSBMill					0.1
+	0		1			90	BioToFPS	1002	CombustionFuel			0.2
+	0		1			91	BioToFPS	5		HardwoodLumberMill		0.4
+	0		1			91	BioToFPS	6		HardwoodPlywoodMill		0.2
+	0		1			91	BioToFPS	1002	CombustionFuel			0.4
+	0		1			90	SnagToFPS	1		SoftwoodLumberMill		0.1
+	0		1			90	SnagToFPS	2		ChipMill				0.2
+	0		1			90	SnagToFPS	3		SoftwoodPlywoodMill		0
+	0		1			90	SnagToFPS	1002	CombustionFuel			0.7
+	0		1			91	SnagToFPS	5		HardwoodLumberMill		0.1
+	0		1			91	SnagToFPS	2		ChipMill				0.2
+	0		1			91	SnagToFPS	6		HardwoodPlywoodMill		0
+	0		1			91	SnagToFPS	1002	CombustionFuel			0.7
+	11		1			90	BioToFPS	1		SoftwoodLumberMill		0.5
+	11		1			90	BioToFPS	2		ChipMill				0
+	11		1			90	BioToFPS	3		SoftwoodPlywoodMill		0.2
+	11		1			90	BioToFPS	4		OSBMill					0.1
+	11		1			90	BioToFPS	1002	CombustionFuel			0.2
+	11		1			91	BioToFPS	5		HardwoodLumberMill		0.4
+	11		1			91	BioToFPS	6		HardwoodPlywoodMill		0.2
+	11		1			91	BioToFPS	1002	CombustionFuel			0.4
+	11		1			91	SnagToFPS	5		HardwoodLumberMill		0.1
+	11		1			91	SnagToFPS	2		ChipMill				0.2
+	11		1			91	SnagToFPS	6		HardwoodPlywoodMill		0
+	11		1			91	SnagToFPS	1002	CombustionFuel			0.7
+
+
+ProportionsFromMillsToPrimaryWoodProducts
+>> Time	Mill Code 	Mill Name 		Primary		Primary			Mill X
+>> Start (From)		(From)			Code (To)	Name (To)
+>>---------------------------------------------------------------------------------------
+	0	1		SoftwoodLumberMill	1000		LandfillWood	0.1
+	0	1		SoftwoodLumberMill	1001		DumpWood		0.1
+	0	1		SoftwoodLumberMill	1002		CombustionFuel	0.1
+	0	1		SoftwoodLumberMill	104			Lumber			0.5
+	0	1		SoftwoodLumberMill	105			Chips			0.2
+	0	2		Chipmill			1001		DumpWood		0.1
+	0	2		Chipmill			1002		CombustionFuel	0.2
+	0	2		Chipmill			105			Chips			0.7
+	0	3		SoftwoodPlywoodMill	1001		DumpWood		0.1
+	0	3		SoftwoodPlywoodMill	1002		CombustionFuel	0.1
+	0	3		SoftwoodPlywoodMill	106			Plywood			0.5
+	0	3		SoftwoodPlywoodMill	4			OSBMill			0.3
+	0	4		OSBmill				1001		DumpWood		0.1
+	0	4		OSBmill				1002		CombustionFuel	0.2
+	0	4		OSBmill				107			OSB				0.7
+	0	5		HardwoodLumberMill	1000		Landfills		0.1
+	0	5		HardwoodLumberMill	1001		DumpWood		0.1
+	0	5		HardwoodLumberMill	1002		CombustionFuel	0.3
+	0	5		HardwoodLumberMill	104			Lumber			0.5
+	0	6		HardwoodPlywoodMill	1001		DumpWood		0.1
+	0	6		HardwoodPlywoodMill	1002		CombustionFuel	0.1
+	0	6		HardwoodPlywoodMill	106			Plywood			0.5
+	0	6		HardwoodPlywoodMill	105			Chips			0.3
+	11	1		SoftwoodLumberMill	1000		LandfillWood	0.1
+	11	1		SoftwoodLumberMill	1001		DumpWood		0.1
+	11	1		SoftwoodLumberMill	1002		CombustionFuel	0.1
+	11	1		SoftwoodLumberMill	104			Lumber			0.5
+	11	1		SoftwoodLumberMill	105			Chips			0.2
+	11	2		Chipmill			1001		DumpWood		0.1
+	11	2		Chipmill			1002		CombustionFuel	0.2
+	11	2		Chipmill			105			Chips			0.7
+	11	3		SoftwoodPlywoodMill	1001		DumpWood		0.1
+	11	3		SoftwoodPlywoodMill	1002		CombustionFuel	0.1
+	11	3		SoftwoodPlywoodMill	106			Plywood			0.5
+	11	3		SoftwoodPlywoodMill	4			OSBMill			0.3
+	11	4		OSBmill				1001		DumpWood		0.1
+	11	4		OSBmill				1002		CombustionFuel	0.2
+	11	4		OSBmill				107			OSB				0.7
+	11	5		HardwoodLumberMill	1000		Landfills		0.1
+	11	5		HardwoodLumberMill	1001		DumpWood		0.1
+	11	5		HardwoodLumberMill	1002		CombustionFuel	0.3
+	11	5		HardwoodLumberMill	104			Lumber			0.5
+	11	6		HardwoodPlywoodMill	1001		DumpWood		0.1
+	11	6		HardwoodPlywoodMill	1002		CombustionFuel	0.1
+	11	6		HardwoodPlywoodMill	106			Plywood			0.5
+	11	6		HardwoodPlywoodMill	105			Chips			0.3
+
+ProportionsFromPrimaryToMarkets
+>>Time	Primary			Primary			Market	Market Name		Market X
+>>Start	Code (From)		Name (From)		(To)	(To)
+>>---------------------------------------------------------------------------------------
+	0	105				Chips			300		Canada			0.5
+	0	105				Chips			301		US				0.5
+	0	1002			CombustionFuel	300		Canada			0.5
+	0	1002			CombustionFuel	301		US				0.5
+	0	104				Lumber			300		Canada			0.2
+	0	104				Lumber			301		US				0.8
+	0	107				OSB				300		Canada			0.2
+	0	107				OSB				301		US				0.8
+	0	106				Plywood			300		Canada			0.2
+	0	106				Plywood			301		US				0.8
+
+ProportionsFromPrimaryToSecondaryProducts
+>>Time	Market		Primary			Primary		Secondary	Secondary			Secondary X		Retirement  Param. 1 Param. 2
+>>Start	Code (From)	Code (From)		Name (From)	Code (To)	Name (To)	 						function
+>>------------------------------------------------------------------------------------------------------------------------------
+	0	300			105				Chips		200		Kraft_paper						0.25	exponential		2	-99
+	0	300			105				Chips		202		Newsprint/packaging				0.45	exponential		2	-99
+	0	300			105				Chips		1003	Effluent/Dump					0.3		exponential		2	-99
+	0	300			104				Lumber		204		Single_family_homes				0.25	exponential		90	-99
+	0	300			104				Lumber		205		Multi_family_homes				0.02	exponential		75	-99
+	0	300			104				Lumber		206		Furniture_and_manf_goods 		0.1		exponential		38	-99
+	0	300			104				Lumber		207		Repairs_and_maintenance			0.25	exponential		30	-99
+	0	300			104				Lumber		208		Commercial_buildings			0.08	exponential		75	-99
+	0	300			104				Lumber		209		Shipping						0.1		exponential		2	-99
+	0	300			104				Lumber		210		Other_use						0.14	exponential		38	-99
+	0	300			104				Lumber		1000	LandfillWood					0.06	exponential		20	-99
+	0	301			105				Chips		400		Kraft_paper						0.45	exponential		2	-99
+	0	301			105				Chips		1003	Effluent/Dump					0.05	exponential		2	-99
+	0	301			105				Chips		1002	CombustionFuel					0.5		instant			-99	-99
+	0	301			104				Lumber		204		Single_family_homes				0.25	exponential		90	-99
+	0	301			104				Lumber		205		Multi_family_homes				0.02	exponential		75	-99
+	0	301			104				Lumber		206		Furniture_and_manf_goods		0.1		exponential		38	-99
+	0	301			104				Lumber		207		Repairs_and_maintenance			0.25	exponential		30	-99
+	0	301			104				Lumber		208		Commercial_buildings			0.08	exponential		75	-99
+	0	301			104				Lumber		209		Shipping						0.1		exponential		2	-99
+	0	301			104				Lumber		210		Other_use						0.14	exponential		38	-99
+	0	301			104				Lumber		1000	LandfillWood					0.06	exponential		40	-99
+	0	300			107				OSB			209		Shipping						1		exponential		2	-99
+	0	300			106				Plywood		209		Shipping						1		exponential		2	-99
+	0	301			107				OSB			209		Shipping						1		exponential		2	-99
+	0	301			106				Plywood		209		Shipping						1		exponential		2	-99
+
+
+ProportionsFromSecondaryProductsToRetirementOptions
+>> Time	Market		Secondary	Secondary			Retirement	Retirement		Retirement X
+>> Start Code(From)	Code(From)	Name (From)			Code(To)	Name(To)	
+>>---------------------------------------------------------------------------------------
+	0	300			200		Kraft_paper					1004	LandfillPaper	0.75
+	0	300			200		Kraft_paper					1005	Fuel			0.25
+	0	300			202		Newsprint/packaging			1004	LandfillPaper	1.0
+	0	300			204		Single_family_homes			1000	LandfillWood	0.8
+	0	300			204		Single_family_homes			1005	Fuel			0.2
+	0	300			205		Multi_family_homes			1000	LandfillWood	0.8
+	0	300			205		Multi_family_homes			1005	Fuel			0.2
+	0	300			206		Furniture_and_manf_goods	1000	LandfillWood	1
+	0	300			207		Repairs_and_maintenance		1000	LandfillWood	1
+	0	300			208		Commercial_buildings		1000	LandfillWood	0.8
+	0	300			208		Commercial_buildings		1005	Fuel			0.2
+	0	300			209		Shipping					1000	LandfillWood	1
+	0	300			210		Other_use					1000	LandfillWood	1
+	0	301			400		Kraft_paper					1004	LandfillPaper	0.75
+	0	301			400		Kraft_paper					1005	Fuel			0.25
+	0	301			201		Newsprint/packaging			1004	LandfillPaper	1.0
+	0	301			204		Single_family_homes			1000	LandfillWood	0.8
+	0	301			204		Single_family_homes			1005	Fuel			0.2
+	0	301			205		Multi_family_homes			1000	LandfillWood	0.8
+	0	301			205		Multi_family_homes			1005	Fuel			0.2
+	0	301			206		Furniture_and_manf_goods	1000	LandfillWood	1
+	0	301			207		Repairs_and_maintenance		1000	LandfillWood	1
+	0	301			208		Commercial_buildings		1000	LandfillWood	0.8
+	0	301			208		Commercial_buildings		1005	Fuel			0.2
+	0	301			209		Shipping					1000	LandfillWood	1
+	0	301			210		Other_use					1000	LandfillWood	1
+
+ProportionsFromRetirementToDisposal
+>>Time 	Retirement	Retirement		Disposal	Disposal			Disposal X	Half-life	Respiration	Respiration
+>>Start	Code(From)	Name(From)		Code(To)	Name (To)						 			Code		Name
+>>---------------------------------------------------------------------------------------
+	0	1000		LandfillWood		1009	DegradableLandfillWood	0.23		29			1500	Anaerobic
+	0	1004		LandfillPaper		1010	DegradableLandfillPaper	0.58		14			1500	Anaerobic
+	0	1001		DumpWood			2999	N/A						1			16			1511	Aerobic
+	0	1003		DumpsPaper			2999	N/A						1			8			1511	Aerobic
+	0	1002		CombustionFuel		2006	E_CO2					0.9999985	-99			-99
+	0	1002		CombustionFuel		2007	E_CH4					1.5E-06		-99			-99
+	0	1005		Fuel				2006	E_CO2					0.9999985	-99			-99
+	0	1005		Fuel				2007	E_CH4					1.5E-06		-99			-99
+
+Substitution
+>>	Substitution = Primary * SubstitutionRatio * DisplacementFactor
+>>Time	Market		Primary	Primary				Substitution	Displacement
+>>Start				Code	Name				Ratio			Factor
+>>---------------------------------------------------------------------------------------
+	0	300			104		Lumber					0.2				1.8
+	0	300			107		OSB						0.2				1.8
+	0	300			106		Plywood					0.2				1.8
+	0	300			105		Chips					0				0
+	0	301			104		Lumber					0.05			1.8
+	0	301			107		OSB						0.05			1.8
+	0	301			106		Plywood					0.05			1.8
+	0	301			108		HWLumber				0.05			1.8
+	0	301			109		HWPlywood				0.05			1.8
+	0	301			105		Chips					0				0
+	40	300			104		Lumber					0.2				1.1
+	40	300			107		OSB						0.2				1.1
+	40	300			106		Plywood					0.2				1.1
+	40	300			105		Chips					0				0
+	40	301			104		Lumber					0.05			1.1
+	40	301			107		OSB						0.05			1.1
+	40	301			106		Plywood					0.05			1.1
+	40	301			108		HWLumber				0.05			1.1
+	40	301			109		HWPlywood				0.05			1.1
+	40	300			105		Chips					0				0
+LandfillGasManagement
+>>TimeStart	Respiration	Landfills 	Capture		Oxidation
+>>Start		Code		With LFGM	Efficiency
+>>---------------------------------------------------------------------------------------
+	0		1500		0.1			0.88		0.22
+>>	0		1500		-999		-999		0.22
+
