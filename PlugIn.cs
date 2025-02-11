@@ -59,7 +59,11 @@ namespace Landis.Extension.FPS
 
         }
 
-
+        // ADD CUSTOM COHORT FIELDS HERE
+        public override void AddCohortData()
+        {
+            return;
+        }
     }
 
 }
