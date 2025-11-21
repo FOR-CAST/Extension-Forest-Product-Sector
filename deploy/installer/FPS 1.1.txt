@@ -1,0 +1,9 @@
+LandisData   Extension
+
+Name         "Forest Product Sector Extension"
+Version      1.1
+Type         extension
+Assembly     Landis.Extension.FPS-v1
+Class        Landis.Extension.FPS.PlugIn
+Description  "Forest Product Sector Extension"
+CoreVersion  8.0
