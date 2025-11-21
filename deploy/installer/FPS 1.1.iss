@@ -52,6 +52,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: {#BuildDir}\Landis.Extension.FPS-v1.dll; DestDir: {#SetupDir}; Flags: replacesameversion
 Source: {#BuildDir}\Landis.Extension.FPS-v1.exe; DestDir: {#SetupDir}; Flags: replacesameversion
 Source: {#BuildDir}\Landis.Extension.FPS-v1.runtimeconfig.json; DestDir: {#SetupDir}; Flags: replacesameversion
+Source: LANDIS-II ForestProducts v1.1 User Guide.pdf; DestDir: {#SetupDir}; Flags: replacesameversion
+
 
 ; Requisite auxiliary libraries
 ; NB. These libraries are used by other extensions and thus are never uninstalled.
