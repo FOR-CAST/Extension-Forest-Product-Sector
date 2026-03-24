@@ -26,10 +26,6 @@
 *.a
 *.lib
 
-# Executables
-*.exe
-*.out
-*.app
 /bin
 FPS.sln
 /obj

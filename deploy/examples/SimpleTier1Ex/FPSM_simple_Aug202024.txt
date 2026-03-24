@@ -82,7 +82,7 @@ Substitution
 >>Time	Market		Primary	Primary				Substitution	Displacement
 >>Start				Code	Name				Ratio			Factor
 >>---------------------------------------------------------------------------------------
->>	0	300			104		Sawnwood					0				0
+	0	300			104		Sawnwood					0				0
 	
 LandfillGasManagement
 >>TimeStart	Respiration	Landfills 	Capture		Oxidation
