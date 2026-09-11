@@ -1,0 +1,61 @@
+name: build
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    name: build (ubuntu-latest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      # The three support libraries are not on any NuGet feed; the repo's own
+      # script fetches them from Support-Library-Dlls-v8 into lib/, where the
+      # HintPath references in FPS.csproj pick them up. Running the committed
+      # script (rather than reimplementing it) keeps CI testing the documented
+      # build path.
+      - name: Download LANDIS-II support libraries
+        shell: pwsh
+        working-directory: lib
+        run: ./support_libs_download.ps1
+
+      - name: Verify support libraries are present
+        run: |
+          set -euo pipefail
+          for dll in Landis.Library.Metadata-v2.dll Landis.Library.Parameters-v2.dll MathNet.Numerics.dll; do
+            test -s "lib/$dll" || { echo "::error::missing lib/$dll"; exit 1; }
+            printf '%10s  %s\n' "$(stat -c%s "lib/$dll")" "lib/$dll"
+          done
+
+      # Restores Landis.Core from the MyGet feed declared in NuGet.config.
+      # Without that file this step is what fails, which is the whole point of
+      # running it in CI.
+      - name: Restore
+        run: dotnet restore FPS.csproj
+
+      - name: Build
+        run: dotnet build FPS.csproj -c Release --no-restore
+
+      - name: Verify build output
+        run: |
+          set -euo pipefail
+          dll="bin/Release/net8.0/Landis.Extension.FPS-v1.dll"
+          test -s "$dll" || { echo "::error::expected assembly not produced: $dll"; exit 1; }
+          printf '%10s  %s\n' "$(stat -c%s "$dll")" "$dll"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: fps-linux-build
+          path: |
+            bin/Release/net8.0/Landis.Extension.FPS-v1.dll
+            bin/Release/net8.0/Landis.Extension.FPS-v1.runtimeconfig.json
+            bin/Release/net8.0/Landis.Extension.FPS-v1.deps.json
+          if-no-files-found: error
