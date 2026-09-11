@@ -1,0 +1,87 @@
+name: examples
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  # The current LANDIS-II v8 Linux release image, by TAG rather than digest.
+  # CI should track what users actually get, so that an upstream change which
+  # breaks compatibility surfaces here as a failure rather than being hidden
+  # behind a pin. The resolved digest is printed below, so a failing run can
+  # still be traced to an exact image.
+  LANDIS_IMAGE: ghcr.io/landis-ii-foundation/landis-ii-v8-uclv2-release:latest
+
+jobs:
+  examples:
+    name: shipped examples reproduce their committed output
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Download LANDIS-II support libraries
+        shell: pwsh
+        working-directory: lib
+        run: ./support_libs_download.ps1
+
+      - name: Build
+        run: dotnet build FPS.csproj -c Release
+
+      # Run inside the LANDIS-II runtime image rather than bare on the runner.
+      # FPSM is not self-contained: it resolves Landis.Core and friends from
+      # alongside itself, and in a real deployment those come from the LANDIS
+      # installation. Running here tests the combination that is actually
+      # shipped, and would catch an assembly version skew between the support
+      # DLLs this repo builds against and the ones a LANDIS install provides.
+      - name: Run examples and compare against committed output
+        run: |
+          set -uo pipefail
+          docker pull -q "$LANDIS_IMAGE"
+          echo "image: $(docker inspect --format '{{index .RepoDigests 0}}' "$LANDIS_IMAGE")"
+          status=0
+
+          for ex in deploy/examples/*/; do
+            name=$(basename "$ex")
+            cfg=$(basename "$(ls "$ex"FPSM_*.txt)")
+            work="$RUNNER_TEMP/$name"
+            echo "::group::$name ($cfg)"
+
+            # Inputs and the built assembly only. The committed FPS_* outputs
+            # stay where they are; they are the reference to diff against, and
+            # FPSM writes its output to the working directory under fixed names.
+            mkdir -p "$work"
+            cp "$ex"log_Flux*.csv "$ex$cfg" "$work/"
+            cp bin/Release/net8.0/*.dll bin/Release/net8.0/*.json "$work/"
+
+            docker run --rm -v "$work:/work" -w /work "$LANDIS_IMAGE" bash -c '
+              set -e
+              core=$(find /opt -name Landis.Core.dll -print -quit 2>/dev/null || true)
+              if [ -z "$core" ]; then echo "Landis.Core.dll not found in image" >&2; exit 1; fi
+              ext=$(dirname "$core")
+              echo "LANDIS assemblies: $ext"
+              # Fill in only what the build output does not already provide, so
+              # the assemblies this repo builds against are the ones under test.
+              cp -n "$ext"/*.dll /work/ 2>/dev/null || true
+              dotnet /work/Landis.Extension.FPS-v1.dll '"$cfg"'
+            ' || { echo "::error::$name failed to run"; status=1; echo "::endgroup::"; continue; }
+
+            for out in FPS_log.txt FPS_raw_out.csv FPS_test_out.csv; do
+              if [ ! -e "$ex$out" ]; then continue; fi
+              if diff -q "$ex$out" "$work/$out" >/dev/null 2>&1; then
+                echo "  match: $out"
+              else
+                echo "::error::$name/$out differs from the committed reference"
+                diff "$ex$out" "$work/$out" | head -25
+                status=1
+              fi
+            done
+            echo "::endgroup::"
+          done
+
+          exit $status
