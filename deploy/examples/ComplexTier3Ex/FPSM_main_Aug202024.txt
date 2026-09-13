@@ -8,7 +8,7 @@ CellLength 100
 YearsPostHarvest 10
 
 HarvestFileLive	"log_FluxBio.csv"
-HarvestFileDOM	"log_fluxDOM.csv"
+HarvestFileDOM	"log_FluxDOM.csv"
 ManagementUnits	"manunits.gis"
 
 OutputInterval  1
