@@ -1,5 +1,5 @@
-# SimpleTier1 with BioToFPS written BioToFPSX, which is not a pool name at all.
-# RECORDS CURRENT BEHAVIOUR, which is wrong: indistinguishable from the
-# wrong-case version above, because both fall through GetFPSPool() to 4.
-exit_zero: yes
-log_contains: No proportions found for Forest To Mills
+# SimpleTier1 with BioToFPS written BioToFPSX, which is not a pool name.
+# An unmatched name now fails the run instead of silently becoming an
+# out-of-range code that nothing ever requests.
+exit_zero: no
+stdout_contains: is not a valid pool name

@@ -1,6 +1,5 @@
 # SimpleTier1 with the retirement function written Exponential.
-# RECORDS CURRENT BEHAVIOUR, which is wrong: GetFunctionType() falls through
-# to 4, CheckFunctionParameters() validates only 1-3 so it passes unchecked,
-# and UtilFunctions.GetProportion() has no branch for 4, returning its
-# initialised value of 1. The curve silently becomes instant retirement.
+# Retirement function names now match case-insensitively, so the curve stays
+# exponential rather than silently degrading to instant retirement.
 exit_zero: yes
+matches_example: SimpleTier1Ex
