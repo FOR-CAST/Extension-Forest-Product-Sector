@@ -7,6 +7,7 @@ using System.Text;
 //using Landis.SpatialModeling;
 using Landis.Utilities;
 using Landis.Core;
+using System.Globalization;
 using System.IO;
 //using OSGeo.GDAL;
 
@@ -28,6 +29,14 @@ namespace Landis.Extension.FPS
 
         static void Main(string[] args)  
         {
+            //  Number parsing and formatting follow the ambient culture. Under a
+            //  comma-decimal locale "0.5" reads as 5: the proportion-sum check
+            //  happens to catch that in the configuration, but nothing catches it
+            //  in the flux logs, and output would be written with commas into a
+            //  comma-separated file. Pin the culture before anything is read.
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
             string inFile = args[0];
 
             RunFPS(inFile);

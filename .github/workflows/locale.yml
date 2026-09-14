@@ -56,12 +56,15 @@ jobs:
           echo "exit code: $code"
           sed 's/^/  | /' "$RUNNER_TEMP/out.txt"
 
-          # RECORDS CURRENT BEHAVIOUR. The run fails under a comma-decimal
-          # locale; this expectation is inverted by the fix that follows.
-          if [ $code -eq 0 ]; then
-            echo "::error::expected the run to fail under de_DE.UTF-8, but it succeeded"
+          if [ $code -ne 0 ]; then
+            echo "::error::the run failed under de_DE.UTF-8"
             exit 1
           fi
-          grep -qi "did not equal 1" "$RUNNER_TEMP/out.txt" \
-            || { echo "::error::failed for an unexpected reason"; exit 1; }
-          echo "confirmed: fails at configuration parse because 0.5 is read as 5"
+          #  Same locale, same answer: the output must match what the example
+          #  produces under the runner's own C locale.
+          if ! diff -q "$ex/FPS_raw_out.csv" "$work/FPS_raw_out.csv" >/dev/null; then
+            echo "::error::output under de_DE.UTF-8 differs from the committed reference"
+            diff "$ex/FPS_raw_out.csv" "$work/FPS_raw_out.csv" | head -10
+            exit 1
+          fi
+          echo "confirmed: identical output under a comma-decimal locale"
