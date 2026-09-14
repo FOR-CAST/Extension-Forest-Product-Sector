@@ -1,0 +1,35 @@
+name: tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  LANDIS_IMAGE: ghcr.io/landis-ii-foundation/landis-ii-v8-uclv2-release:latest
+
+jobs:
+  cases:
+    name: configuration cases behave as recorded
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Download LANDIS-II support libraries
+        shell: pwsh
+        working-directory: lib
+        run: ./support_libs_download.ps1
+
+      - name: Build
+        run: dotnet build FPS.csproj -c Release
+
+      - name: Run configuration cases
+        run: |
+          docker pull -q "$LANDIS_IMAGE"
+          echo "image: $(docker inspect --format '{{index .RepoDigests 0}}' "$LANDIS_IMAGE")"
+          tests/run-cases.sh bin/Release/net8.0 "$LANDIS_IMAGE"

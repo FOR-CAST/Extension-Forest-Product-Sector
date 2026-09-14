@@ -1,0 +1,7 @@
+# SimpleTier1 with BioToFPS written BIOTOFPS.
+# RECORDS CURRENT BEHAVIOUR, which is wrong: GetFPSPool() compares with ==,
+# so the name does not match, and it returns 4 rather than raising. Nothing
+# ever asks for pool 4, so every BioToFPS row is silently inert and the live
+# harvest carbon is discarded with only a line in the log.
+exit_zero: yes
+log_contains: No proportions found for Forest To Mills
