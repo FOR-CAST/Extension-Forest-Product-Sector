@@ -1,0 +1,70 @@
+name: locale
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  LANDIS_IMAGE: ghcr.io/landis-ii-foundation/landis-ii-v8-uclv2-release:latest
+
+jobs:
+  comma-decimal:
+    name: runs under a comma-decimal locale
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Download LANDIS-II support libraries
+        shell: pwsh
+        working-directory: lib
+        run: ./support_libs_download.ps1
+
+      - name: Build
+        run: dotnet build FPS.csproj -c Release
+
+      # Number parsing follows the ambient culture, so under a locale that
+      # writes decimals with a comma "0.5" is read as 5. The proportion-sum
+      # check happens to catch it at configuration parse, but the FLUX LOG
+      # parse has no equivalent tripwire, so a comma-decimal locale could
+      # misread carbon values without failing at all.
+      - name: Run an example under de_DE.UTF-8
+        run: |
+          set -uo pipefail
+          #  The step shell runs with -e; the run under test is expected to
+          #  fail, so its exit code has to be captured rather than fatal.
+          set +e
+          docker pull -q "$LANDIS_IMAGE"
+          ex=deploy/examples/SimpleTier1Ex
+          work="$RUNNER_TEMP/locale"
+          mkdir -p "$work"
+          cp "$ex"/log_Flux*.csv "$ex"/FPSM_simple_Aug202024.txt "$work/"
+          cp bin/Release/net8.0/*.dll bin/Release/net8.0/*.json "$work/"
+
+          docker run --rm -e LC_ALL=de_DE.UTF-8 -e LANG=de_DE.UTF-8 \
+            -v "$work:/work" -w /work "$LANDIS_IMAGE" bash -c '
+              core=$(find /opt -name Landis.Core.dll -print -quit 2>/dev/null)
+              cp -n "$(dirname "$core")"/*.dll /work/ 2>/dev/null || true
+              dotnet /work/Landis.Extension.FPS-v1.dll FPSM_simple_Aug202024.txt
+            ' > "$RUNNER_TEMP/out.txt" 2>&1
+          code=$?
+          echo "exit code: $code"
+          sed 's/^/  | /' "$RUNNER_TEMP/out.txt"
+
+          if [ $code -ne 0 ]; then
+            echo "::error::the run failed under de_DE.UTF-8"
+            exit 1
+          fi
+          #  Same locale, same answer: the output must match what the example
+          #  produces under the runner's own C locale.
+          if ! diff -q "$ex/FPS_raw_out.csv" "$work/FPS_raw_out.csv" >/dev/null; then
+            echo "::error::output under de_DE.UTF-8 differs from the committed reference"
+            diff "$ex/FPS_raw_out.csv" "$work/FPS_raw_out.csv" | head -10
+            exit 1
+          fi
+          echo "confirmed: identical output under a comma-decimal locale"
