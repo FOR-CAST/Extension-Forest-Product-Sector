@@ -1,0 +1,5 @@
+# SimpleTier1 with the retirement function written Exponential.
+# Retirement function names now match case-insensitively, so the curve stays
+# exponential rather than silently degrading to instant retirement.
+exit_zero: yes
+matches_example: SimpleTier1Ex

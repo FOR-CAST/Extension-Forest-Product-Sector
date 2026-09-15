@@ -1,0 +1,5 @@
+# SimpleTier1 with BioToFPS written BIOTOFPS.
+# Pool names now match case-insensitively, so this is accepted and produces
+# exactly the output the unmodified example produces.
+exit_zero: yes
+matches_example: SimpleTier1Ex

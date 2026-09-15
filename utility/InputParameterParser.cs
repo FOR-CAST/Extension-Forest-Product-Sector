@@ -479,24 +479,28 @@ namespace Landis.Extension.FPS
         private int GetFPSPool(InputVar<string> sName)
         {
             string[] toFPS = new string[] { "BioToFPS", "SnagToFPS", "DOMtoFPS" };
-            int i = 0;
-            for (i = 0; i<3; i++)
+            for (int i = 0; i < toFPS.Length; i++)
             {
-                if (sName.Value == toFPS[i])
-                    break;
+                //  Ordinal rather than culture-aware: under a Turkish locale a
+                //  culture-aware comparison does not fold I and i together.
+                if (string.Equals(sName.Value, toFPS[i], System.StringComparison.OrdinalIgnoreCase))
+                    return (i + 1);
             }
-            return (i+1);
+            throw new InputValueException(sName.Value,
+                "\"{0}\" is not a valid pool name. Must be one of: {1}",
+                sName.Value, string.Join(", ", toFPS));
         }
         private int GetFunctionType(InputVar<string> sName)
         {
             string[] FType = new string[] { "exponential", "gamma", "instant" };
-            int i = 0;
-            for (i = 0; i < 3; i++)
+            for (int i = 0; i < FType.Length; i++)
             {
-                if (sName.Value == FType[i])
-                    break;
+                if (string.Equals(sName.Value, FType[i], System.StringComparison.OrdinalIgnoreCase))
+                    return (i + 1);
             }
-            return (i + 1);
+            throw new InputValueException(sName.Value,
+                "\"{0}\" is not a valid retirement function. Must be one of: {1}",
+                sName.Value, string.Join(", ", FType));
         }
         private bool CheckFunctionParameters(int ftype, double p1, double p2)
         {
