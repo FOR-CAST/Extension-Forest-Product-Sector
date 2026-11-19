@@ -20,6 +20,10 @@
 #                              secondary product stock in each year equals
 #                              the carbon made into products less the carbon
 #                              they sent to disposal pools
+#   reports_through: <year>    tests/check-reporting-horizon.R passes: every
+#                              pool reports each year through <year>, the last
+#                              harvest year plus YearsPostHarvest, and no row
+#                              is dated after it
 #   matches_example: <name>    FPS_raw_out.csv is byte-identical to the output
 #                              committed under deploy/examples/<name>/
 #   matches_recorded: <file>   FPS_raw_out.csv is byte-identical to <file> in
@@ -83,6 +87,9 @@ for case_dir in "$ROOT"/tests/cases/*/; do
       product_balance)
         Rscript "$ROOT/tests/check-product-balance.R" "$work" | sed 's/^/  | /'
         [ "${PIPESTATUS[0]}" -eq 0 ] || fail "secondary product stock does not balance" ;;
+      reports_through)
+        Rscript "$ROOT/tests/check-reporting-horizon.R" "$work" "$val" | sed 's/^/  | /'
+        [ "${PIPESTATUS[0]}" -eq 0 ] || fail "pools are not reported through year $val" ;;
       matches_example)
         if ! diff -q "$ROOT/deploy/examples/$val/FPS_raw_out.csv" "$work/FPS_raw_out.csv" >/dev/null 2>&1; then
           fail "FPS_raw_out.csv differs from deploy/examples/$val"
