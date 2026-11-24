@@ -24,6 +24,10 @@
 #                              passes: every pool of that secondary
 #                              product retires all its carbon in the
 #                              year it is made
+#   reports_through: <year>    tests/check-reporting-horizon.R passes: every
+#                              pool reports each year through <year>, the last
+#                              harvest year plus YearsPostHarvest, and no row
+#                              is dated after it
 #   matches_example: <name>    FPS_raw_out.csv is byte-identical to the output
 #                              committed under deploy/examples/<name>/
 #   matches_recorded: <file>   FPS_raw_out.csv is byte-identical to <file> in
@@ -90,6 +94,9 @@ for case_dir in "$ROOT"/tests/cases/*/; do
       retires_in_first_year)
         Rscript "$ROOT/tests/check-first-year-retirement.R" "$work" "$val" | sed 's/^/  | /'
         [ "${PIPESTATUS[0]}" -eq 0 ] || fail "product $val does not retire fully in its first year" ;;
+      reports_through)
+        Rscript "$ROOT/tests/check-reporting-horizon.R" "$work" "$val" | sed 's/^/  | /'
+        [ "${PIPESTATUS[0]}" -eq 0 ] || fail "pools are not reported through year $val" ;;
       matches_example)
         if ! diff -q "$ROOT/deploy/examples/$val/FPS_raw_out.csv" "$work/FPS_raw_out.csv" >/dev/null 2>&1; then
           fail "FPS_raw_out.csv differs from deploy/examples/$val"
